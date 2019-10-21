@@ -24,6 +24,8 @@ class _HomePageState extends State<HomePage> {
   LoginHelper helperLog = LoginHelper();
   PersonHelper helper = PersonHelper();
   List<Person> person = List();
+
+
   Api api = new Api();
 
   @override
@@ -207,11 +209,11 @@ class _HomePageState extends State<HomePage> {
     dialog.showBottomOptions(context, botoes);
   }
 
-  void _getAllPersons() async {
-    helper.getAllPersons(widget.login_id).then((list) {
-      setState(() {
-        person = list;
-      });
-    });
+  _getAllPersons() async {
+//    helper.getAllPersons(widget.login_id).then((list) {
+//      setState(() {
+//        person = list;
+//      });
+//    });
   }
 }
