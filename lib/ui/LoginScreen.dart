@@ -77,12 +77,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (_formLogin.currentState.validate()) {
                           Login user = await api.login(_emailController.text, _senhaController.text);
                           if (user != null) {
-                            helper.saveLogado(user.id);
+                            helper.saveLogado(user.id,user.token);
                             Navigator.pop(context);
                             await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HomePage(user.id)));
+                                    builder: (context) => HomePage(api.token)));
                           } else {
                             dialog.showAlertDialog(
                                 context, 'Aviso', 'Login inválido');

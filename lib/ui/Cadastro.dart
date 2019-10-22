@@ -78,16 +78,22 @@ class _CadastroState extends State<Cadastro> {
                         textColor: Colors.blueAccent,
                         onPressed: () async {
                           if (_formCadastro.currentState.validate()) {
-                            if (await api.cadastro(_nomeController.text,_emailController.text,_senhaController.text) != null) {
-                              Login user = await api.login(_emailController.text, _senhaController.text);
+                            if (await api.cadastro(
+                                    _nomeController.text,
+                                    _emailController.text,
+                                    _senhaController.text) !=
+                                null) {
+                              Login user = await api.login(
+                                  _emailController.text, _senhaController.text);
                               Navigator.pop(context);
                               if (user != null) {
-                                helper.saveLogado(user.id);
+                                helper.saveLogado(user.id, user.token);
                                 Navigator.pop(context);
                                 await Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => HomePage(user.id)));
+                                        builder: (context) =>
+                                            HomePage(user.token)));
                               }
                             } else {
                               dialog.showAlertDialog(

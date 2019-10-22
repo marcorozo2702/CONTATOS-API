@@ -30,7 +30,7 @@ class _ContatoState extends State<Contato> {
       _editedContact = Person.fromMap(widget.contact.toMap());
       _nameController.text = _editedContact.nome;
       _telefoneController.text = _editedContact.telefone;
-      _editedContact.login_id = widget.login_id;
+      _editedContact.usuario_id = widget.login_id;
     }
   }
 

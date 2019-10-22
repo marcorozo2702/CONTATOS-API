@@ -9,9 +9,9 @@ import '../ui/LoginScreen.dart';
 import '../helper/Api.dart';
 
 class HomePage extends StatefulWidget {
-  int login_id;
+  String token;
 
-  HomePage(this.login_id);
+  HomePage(this.token);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -24,7 +24,6 @@ class _HomePageState extends State<HomePage> {
   LoginHelper helperLog = LoginHelper();
   PersonHelper helper = PersonHelper();
   List<Person> person = List();
-
 
   Api api = new Api();
 
@@ -90,10 +89,11 @@ class _HomePageState extends State<HomePage> {
                 )));
     if (recContact != null) {
       if (person != null) {
-        await helper.updatePerson(recContact, widget.login_id);
+//        await helper.updatePerson(recContact, widget.login_id);
+        await api.atualizarContato(recContact, widget.token);
       } else {
 //        await helper.savePerson(recContact,widget.login_id);
-        await api.cadastroPerson(recContact, widget.login_id);
+        await api.cadastroPerson(recContact, widget.token);
       }
       _getAllPersons();
     }
@@ -215,5 +215,11 @@ class _HomePageState extends State<HomePage> {
 //        person = list;
 //      });
 //    });
+    api.contatos(widget.token).then((list) {
+      print(list);
+      setState(() {
+        person = list;
+      });
+    });
   }
 }

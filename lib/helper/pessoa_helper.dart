@@ -5,15 +5,17 @@ import '../helper/Databases.dart';
 
 class PersonHelper {
   static final PersonHelper _instance = PersonHelper.internal();
+
   factory PersonHelper() => _instance;
+
   PersonHelper.internal();
 
   Databases databases = new Databases();
 
-  Future<Person> savePerson(Person person,int login_id) async {
+  Future<Person> savePerson(Person person, int login_id) async {
     Person person2 = person;
     Person novaPerson = Person();
-    novaPerson.login_id = login_id;
+    novaPerson.usuario_id = login_id;
     novaPerson.nome = person2.nome;
     novaPerson.telefone = person2.telefone;
     Database dbPerson = await databases.db;
@@ -27,7 +29,7 @@ class PersonHelper {
         columns: [idPersonColumn, nomePersonColumn, telefonePersonColumn],
         where: "$idPersonColumn = ?",
         whereArgs: [id]);
-    if(maps.length > 0){
+    if (maps.length > 0) {
       return Person.fromMap(maps.first);
     } else {
       return null;
@@ -36,27 +38,27 @@ class PersonHelper {
 
   Future<int> deletePerson(int id) async {
     Database dbPerson = await databases.db;
-    return await dbPerson.delete(personTable, where: "$idPersonColumn = ?", whereArgs: [id]);
+    return await dbPerson
+        .delete(personTable, where: "$idPersonColumn = ?", whereArgs: [id]);
   }
 
-  Future<int> updatePerson(Person person,int login_id) async {
+  Future<int> updatePerson(Person person, int login_id) async {
     Person person2 = person;
     Person novaPerson = Person();
-    novaPerson.login_id = login_id;
+    novaPerson.usuario_id = login_id;
     novaPerson.nome = person2.nome;
     novaPerson.telefone = person2.telefone;
     Database dbPerson = await databases.db;
-    return await dbPerson.update(personTable,
-        novaPerson.toMap(),
-        where: "$idPersonColumn = ?",
-        whereArgs: [person2.id]);
+    return await dbPerson.update(personTable, novaPerson.toMap(),
+        where: "$idPersonColumn = ?", whereArgs: [person2.id]);
   }
 
   Future<List> getAllPersons(int login_id) async {
     Database dbPerson = await databases.db;
-    List listMap = await dbPerson.rawQuery("SELECT * FROM $personTable WHERE login_id=$login_id");
+    List listMap = await dbPerson
+        .rawQuery("SELECT * FROM $personTable WHERE login_id=$login_id");
     List<Person> listPerson = List();
-    for(Map m in listMap){
+    for (Map m in listMap) {
       listPerson.add(Person.fromMap(m));
     }
     return listPerson;
@@ -66,40 +68,37 @@ class PersonHelper {
     Database dbPerson = await databases.db;
     dbPerson.close();
   }
-
 }
 
 class Person {
-
-  int id;
+  dynamic id;
   String nome;
   String telefone;
-  int login_id;
+  dynamic usuario_id;
 
   Person();
 
-  Person.fromMap(Map map){
-    id = map[idPersonColumn];
-    nome = map[nomePersonColumn];
-    telefone = map[telefonePersonColumn];
-    login_id = map[login_idPersonColumn];
+  Person.fromMap(Map map) {
+    id = map[id];
+    nome = map[nome];
+    telefone = map[telefone];
+    usuario_id = map[usuario_id];
   }
 
   Map toMap() {
     Map<String, dynamic> map = {
-      nomePersonColumn: nome,
-      telefonePersonColumn: telefone,
-      login_idPersonColumn: login_id
+      nome: nome,
+      telefone: telefone,
+      usuario_id: usuario_id
     };
-    if(id != null){
-      map[idPersonColumn] = id;
+    if (id != null) {
+      map[id] = id;
     }
     return map;
   }
 
   @override
   String toString() {
-    return "Person(id: $id, name: $nome, telefone: $telefone)";
+    return "Person(id: $id, nome: $nome, telefone: $telefone)";
   }
-
 }

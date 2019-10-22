@@ -60,11 +60,12 @@ class LoginHelper {
     return listLogin;
   }
 
-  Future<bool> saveLogado(int login_id) async {
+  Future<bool> saveLogado(int login_id, String tokens) async {
     Database dbLogado = await databases.db;
     Logado logado = new Logado();
     logado.id = 1;
     logado.logado_login_id = login_id;
+    logado.token = tokens;
     if (await dbLogado.insert(logadoTable, logado.toMap()) > 0) {
       return true;
     } else {
@@ -72,14 +73,14 @@ class LoginHelper {
     }
   }
 
-  Future<int> getLogado() async {
+  Future<String> getLogado() async {
     Database dbLogado = await databases.db;
     List<Map> maps = await dbLogado.rawQuery("SELECT * FROM $logadoTable");
     if (maps.length > 0) {
       Logado usuariologado = Logado.fromMap(maps.first);
-      return usuariologado.logado_login_id;
+      return usuariologado.token;
     } else {
-      return 0;
+      return null;
     }
   }
 
@@ -98,18 +99,21 @@ class LoginHelper {
 class Logado {
   int id;
   int logado_login_id;
+  String token;
 
   Logado();
 
   Logado.fromMap(Map map) {
     id = map[idLogadoColumn];
     logado_login_id = map[login_idLogadoColumn];
+    token = map[tokenColumn];
   }
 
   Map toMap() {
     Map<String, dynamic> map = {
       idLoginColumn: id,
-      login_idLogadoColumn: logado_login_id
+      login_idLogadoColumn: logado_login_id,
+      tokenColumn: token
     };
     return map;
   }
@@ -120,6 +124,7 @@ class Login {
   String nome;
   String email;
   String senha;
+  String token;
 
   Login();
 
@@ -128,13 +133,15 @@ class Login {
     email = map[emailLoginColumn];
     nome = map[nomeLoginColumn];
     senha = map[senhaLoginColumn];
+    token = map[tokenLoginColumn];
   }
 
   Map toMap() {
     Map<String, dynamic> map = {
       emailLoginColumn: email,
       nomeLoginColumn: nome,
-      senhaLoginColumn: senha
+      senhaLoginColumn: senha,
+      tokenLoginColumn: token,
     };
     if (id != null) {
       map[idLoginColumn] = id;
@@ -144,6 +151,6 @@ class Login {
 
   @override
   String toString() {
-    return "Login(id: $id, name: $nome, email: $email, senha: $senha)";
+    return "Login(id: $id, name: $nome, email: $email, senha: $senha, token: $token)";
   }
 }

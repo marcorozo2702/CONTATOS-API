@@ -3,11 +3,11 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../utils/Strings.dart';
 
-class Databases{
+class Databases {
   Database _db;
 
   Future<Database> get db async {
-    if(_db != null){
+    if (_db != null) {
       return _db;
     } else {
       _db = await initDb();
@@ -19,16 +19,14 @@ class Databases{
     final databasesPath = await getDatabasesPath();
     final path = join(databasesPath, "contatos.db");
 
-    return await openDatabase(path, version: 1, onCreate: (Database db, int newerVersion) async {
+    return await openDatabase(path, version: 1,
+        onCreate: (Database db, int newerVersion) async {
       await db.execute(
-          "CREATE TABLE $loginTable($idLoginColumn INTEGER PRIMARY KEY AUTOINCREMENT, $nomeLoginColumn TEXT, $emailLoginColumn TEXT, $senhaLoginColumn TEXT);"
-      );
+          "CREATE TABLE $loginTable($idLoginColumn INTEGER PRIMARY KEY AUTOINCREMENT, $nomeLoginColumn TEXT, $emailLoginColumn TEXT, $senhaLoginColumn TEXT, $tokenLoginColumn TEXT);");
       await db.execute(
-          "CREATE TABLE $logadoTable ($idLogadoColumn INTEGER PRIMARY KEY AUTOINCREMENT,$login_idLogadoColumn INT);"
-      );
+          "CREATE TABLE $logadoTable ($idLogadoColumn INTEGER PRIMARY KEY AUTOINCREMENT,$login_idLogadoColumn INT, $tokenColumn TEXT);");
       await db.execute(
-          "CREATE TABLE $personTable($idPersonColumn INTEGER PRIMARY KEY, $nomePersonColumn TEXT, $telefonePersonColumn TEXT NOT NULL UNIQUE, $login_idPersonColumn INTEGER)"
-      );
+          "CREATE TABLE $personTable($idPersonColumn INTEGER PRIMARY KEY , $nomePersonColumn TEXT, $telefonePersonColumn TEXT NOT NULL UNIQUE, $login_idPersonColumn INTEGER)");
     });
   }
 }
