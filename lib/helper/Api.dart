@@ -48,26 +48,28 @@ class Api {
 //    }
 //  }
 
-  Future<Person> cadastroPerson(Person person, String token) async {
-    http.Response response = await http.post(BASE_URL + "Contato",
-        body: jsonEncode({"telefone": person.telefone, "nome": person.nome}),
-        headers: {'token': token, 'Content-Type': 'application/json'});
-    if (response.statusCode == 200) {
-      Person dadosJson = new Person.fromMap(json.decode(response.body));
-      return dadosJson;
-    } else {
-      return null;
-    }
-  }
+//  Future<Person> cadastroPerson(Person person, String token) async {
+//    http.Response response = await http.post(BASE_URL + "Contato",
+//        body: jsonEncode({"telefone": person.telefone, "nome": person.nome}),
+//        headers: {'token': token, 'Content-Type': 'application/json'});
+//    if (response.statusCode == 200) {
+//      Person dadosJson = new Person.fromMap(json.decode(response.body));
+//      return dadosJson;
+//    } else {
+//      return null;
+//    }
+//  }
 
   Future<List<Person>> contatos(String token) async {
     http.Response response = await http.get(BASE_URL + 'Contato',
         headers: {'token': token, 'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
       print(response.body.toString());
+
       List<Person> pessoas = json.decode(response.body).map<Person>((map) {
-        return Person.fromMap(map);
+        return Person.fromJson(map);
       }).toList();
+
       print(pessoas);
       return pessoas;
     } else {
@@ -75,16 +77,16 @@ class Api {
     }
   }
 
-  Future<Person> atualizarContato(String codigoContato, String token) async {
-    http.Response response = await http.patch(
-        BASE_URL + "contatos/" + codigoContato,
-        headers: {'token': token, 'Content-Type': 'application/json'});
-    if (response.statusCode == 200) {
-      return new Person.fromMap(json.decode(response.body));
-    } else {
-      return null;
-    }
-  }
+//  Future<Person> atualizarContato(String codigoContato, String token) async {
+//    http.Response response = await http.patch(
+//        BASE_URL + "contatos/" + codigoContato,
+//        headers: {'token': token, 'Content-Type': 'application/json'});
+//    if (response.statusCode == 200) {
+//      return new Person.fromMap(json.decode(response.body));
+//    } else {
+//      return null;
+//    }
+//  }
 
   Future<bool> deletarContato(String codigoContato) async {
     http.Response response = await http.delete(
