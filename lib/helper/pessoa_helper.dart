@@ -99,6 +99,6 @@ class Person {
 
   @override
   String toString() {
-    return "Person(id: $id, nome: $nome, telefone: $telefone)";
+    return "Person(id: $id, nome: $nome, telefone: $telefone, usuario_id: $usuario_id)";
   }
 }
