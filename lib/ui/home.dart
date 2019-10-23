@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'Contato.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -24,74 +25,59 @@ class _HomePageState extends State<HomePage> {
   LoginHelper helperLog = LoginHelper();
   PersonHelper helper = PersonHelper();
   List<Person> person = List();
-
   Api api = new Api();
-  var isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    isLoading = true;
     _getAllPersons();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Contatos'),
-        backgroundColor: Colors.blueAccent,
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        actions: <Widget>[
-          PopupMenuButton<OrderOptions>(
-              itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
-                    const PopupMenuItem<OrderOptions>(
-                      child: Text('Ordenar de A-Z'),
-                      value: OrderOptions.orderaz,
-                    ),
-                    const PopupMenuItem<OrderOptions>(
-                      child: Text('Ordenar de Z-A'),
-                      value: OrderOptions.orderza,
-                    ),
-                    const PopupMenuItem<OrderOptions>(
-                      child: Text('Sair'),
-                      value: OrderOptions.sair,
-                    )
-                  ],
-              onSelected: _orderList)
-        ],
-      ),
-      backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showContactPage();
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.blueAccent,
-      ),
-      body: isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : ListView.builder(
-              padding: EdgeInsets.all(10.0),
-              itemCount: person.length,
-              itemBuilder: (context, index) {
-                return _personCard(context, index);
-              }),
-//        WillPopScope(
-
-//            child: ListView.builder(
-//                padding: EdgeInsets.all(10.0),
-//                itemCount: person.length,
-//                itemBuilder: (context, index) {
-//                  return _personCard(context, index);
-//                }),
-//            onWillPop: () {
-//              return null;
-//            })
-    );
+        appBar: AppBar(
+          title: Text('Contatos'),
+          backgroundColor: Colors.blueAccent,
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          actions: <Widget>[
+            PopupMenuButton<OrderOptions>(
+                itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
+                      const PopupMenuItem<OrderOptions>(
+                        child: Text('Ordenar de A-Z'),
+                        value: OrderOptions.orderaz,
+                      ),
+                      const PopupMenuItem<OrderOptions>(
+                        child: Text('Ordenar de Z-A'),
+                        value: OrderOptions.orderza,
+                      ),
+                      const PopupMenuItem<OrderOptions>(
+                        child: Text('Sair'),
+                        value: OrderOptions.sair,
+                      )
+                    ],
+                onSelected: _orderList)
+          ],
+        ),
+        backgroundColor: Colors.white,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _showContactPage();
+          },
+          child: Icon(Icons.add),
+          backgroundColor: Colors.blueAccent,
+        ),
+        body: WillPopScope(
+            child: ListView.builder(
+                padding: EdgeInsets.all(10.0),
+                itemCount: person.length,
+                itemBuilder: (context, index) {
+                  return _personCard(context, index);
+                }),
+            onWillPop: () {
+              return null;
+            }));
   }
 
   void _showContactPage({Person person}) async {
@@ -227,7 +213,6 @@ class _HomePageState extends State<HomePage> {
     api.contatos(widget.token).then((list) {
       print(list);
       setState(() {
-        isLoading = false;
         person = list;
       });
     });

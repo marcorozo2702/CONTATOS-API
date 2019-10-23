@@ -65,7 +65,6 @@ class Api {
         headers: {'token': token, 'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
       print(response.body.toString());
-
       List<Person> pessoas = json.decode(response.body).map<Person>((map) {
         return Person.fromJson(map);
       }).toList();

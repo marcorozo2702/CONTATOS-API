@@ -90,12 +90,13 @@ class Person {
     );
   }
 
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "nome": nome,
-        "telefone": telefone,
-        "usuario_id": usuario_id,
-      };
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['nome'] = this.nome;
+    data['telefone'] = this.telefone;
+    return data;
+  }
 
 //  Person.fromMap(Map map) {
 //    id = map[id];
@@ -108,7 +109,6 @@ class Person {
 //    Map<String, dynamic> map = {
 //      nome: nome,
 //      telefone: telefone,
-//      usuario_id: usuario_id
 //    };
 //    if (id != null) {
 //      map[id] = id;
@@ -116,8 +116,8 @@ class Person {
 //    return map;
 //  }
 
-  @override
-  String toString() {
-    return "Person(id: $id, nome: $nome, telefone: $telefone, usuario_id: $usuario_id)";
-  }
+//  @override
+//  String toString() {
+//    return "Person(id: $id, nome: $nome, telefone: $telefone, usuario_id: $usuario_id)";
+//  }
 }
