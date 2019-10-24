@@ -5,6 +5,7 @@ import '../helper/pessoa_helper.dart';
 class Contato extends StatefulWidget {
   final Person contact;
   final login_id;
+
   Contato({this.contact, this.login_id});
 
   @override
@@ -28,6 +29,7 @@ class _ContatoState extends State<Contato> {
       _editedContact = Person();
     } else {
 //      _editedContact = Person.fromMap(widget.contact.toMap());
+      _editedContact = Person.fromJson(widget.contact.toJson());
       _nameController.text = _editedContact.nome;
       _telefoneController.text = _editedContact.telefone;
       _editedContact.usuario_id = widget.login_id;

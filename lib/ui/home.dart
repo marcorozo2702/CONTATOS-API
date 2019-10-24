@@ -30,45 +30,47 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    print(widget.token);
     _getAllPersons();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Contatos'),
-          backgroundColor: Colors.blueAccent,
-          centerTitle: true,
-          automaticallyImplyLeading: false,
-          actions: <Widget>[
-            PopupMenuButton<OrderOptions>(
-                itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
-                      const PopupMenuItem<OrderOptions>(
-                        child: Text('Ordenar de A-Z'),
-                        value: OrderOptions.orderaz,
-                      ),
-                      const PopupMenuItem<OrderOptions>(
-                        child: Text('Ordenar de Z-A'),
-                        value: OrderOptions.orderza,
-                      ),
-                      const PopupMenuItem<OrderOptions>(
-                        child: Text('Sair'),
-                        value: OrderOptions.sair,
-                      )
-                    ],
-                onSelected: _orderList)
-          ],
-        ),
-        backgroundColor: Colors.white,
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _showContactPage();
-          },
-          child: Icon(Icons.add),
-          backgroundColor: Colors.blueAccent,
-        ),
-        body: WillPopScope(
+      appBar: AppBar(
+        title: Text('Contatos'),
+        backgroundColor: Colors.blueAccent,
+        centerTitle: true,
+        automaticallyImplyLeading: false,
+        actions: <Widget>[
+          PopupMenuButton<OrderOptions>(
+              itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
+                    const PopupMenuItem<OrderOptions>(
+                      child: Text('Ordenar de A-Z'),
+                      value: OrderOptions.orderaz,
+                    ),
+                    const PopupMenuItem<OrderOptions>(
+                      child: Text('Ordenar de Z-A'),
+                      value: OrderOptions.orderza,
+                    ),
+                    const PopupMenuItem<OrderOptions>(
+                      child: Text('Sair'),
+                      value: OrderOptions.sair,
+                    )
+                  ],
+              onSelected: _orderList)
+        ],
+      ),
+      backgroundColor: Colors.white,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _showContactPage();
+        },
+        child: Icon(Icons.add),
+        backgroundColor: Colors.blueAccent,
+      ),
+      body:
+        WillPopScope(
             child: ListView.builder(
                 padding: EdgeInsets.all(10.0),
                 itemCount: person.length,
@@ -77,7 +79,8 @@ class _HomePageState extends State<HomePage> {
                 }),
             onWillPop: () {
               return null;
-            }));
+            })
+    );
   }
 
   void _showContactPage({Person person}) async {
@@ -89,11 +92,9 @@ class _HomePageState extends State<HomePage> {
                 )));
     if (recContact != null) {
       if (person != null) {
-//        await helper.updatePerson(recContact, widget.login_id);
 //        await api.atualizarContato(recContact, widget.token);
       } else {
-//        await helper.savePerson(recContact,widget.login_id);
-//        await api.cadastroPerson(recContact, widget.token);
+        await api.cadastroPerson(recContact, widget.token);
       }
       _getAllPersons();
     }

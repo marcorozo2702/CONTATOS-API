@@ -41,24 +41,24 @@ class Api {
 //        body: jsonEncode({"telefone": telefone, "nome": nome}),
 //        headers: {'token': token, 'Content-Type': 'application/json'});
 //    if (response.statusCode == 200) {
-//      Person dadosJson = new Person.fromMap(json.decode(response.body));
+//      Person dadosJson = new Person.fromJson(json.decode(response.body));
 //      return dadosJson;
 //    } else {
 //      return null;
 //    }
 //  }
 
-//  Future<Person> cadastroPerson(Person person, String token) async {
-//    http.Response response = await http.post(BASE_URL + "Contato",
-//        body: jsonEncode({"telefone": person.telefone, "nome": person.nome}),
-//        headers: {'token': token, 'Content-Type': 'application/json'});
-//    if (response.statusCode == 200) {
-//      Person dadosJson = new Person.fromMap(json.decode(response.body));
-//      return dadosJson;
-//    } else {
-//      return null;
-//    }
-//  }
+  Future<Person> cadastroPerson(Person person, String token) async {
+    http.Response response = await http.post(BASE_URL + "Contato",
+        body: jsonEncode({"telefone": person.telefone, "nome": person.nome}),
+        headers: {'token': token, 'Content-Type': 'application/json'});
+    if (response.statusCode == 200) {
+      Person dadosJson = new Person.fromJson(json.decode(response.body));
+      return dadosJson;
+    } else {
+      return null;
+    }
+  }
 
   Future<List<Person>> contatos(String token) async {
     http.Response response = await http.get(BASE_URL + 'Contato',
