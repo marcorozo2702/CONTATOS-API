@@ -1,10 +1,8 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 
-
 class Dialogs extends State {
-
-  void showAlertDialog(BuildContext context,title, message) {
+  void showAlertDialog(BuildContext context, title, message) {
     AlertDialog alert = AlertDialog(
       title: Text(title),
       content: Text(message),
@@ -25,8 +23,7 @@ class Dialogs extends State {
     );
   }
 
-
-  void showBottomOptions(BuildContext context,botoes){
+  void showBottomOptions(BuildContext context, botoes) {
     showModalBottomSheet(
         context: context,
         builder: (context) {

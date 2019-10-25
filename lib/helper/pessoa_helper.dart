@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:sqflite/sqflite.dart';
-import '../utils/Strings.dart';
 import '../helper/Databases.dart';
 
 class PersonHelper {
@@ -116,8 +114,8 @@ class Person {
 //    return map;
 //  }
 
-//  @override
-//  String toString() {
-//    return "Person(id: $id, nome: $nome, telefone: $telefone, usuario_id: $usuario_id)";
-//  }
+  @override
+  String toString() {
+    return "Person(id: $id, nome: $nome, telefone: $telefone, usuario_id: $usuario_id)";
+  }
 }

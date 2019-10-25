@@ -19,13 +19,12 @@ class _LoginScreenState extends State<LoginScreen> {
   LoginHelper helper = LoginHelper();
   List<Login> login = List();
   Dialogs dialog = new Dialogs();
+  Api api = new Api();
+
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
   final _emaiLFocus = FocusNode();
-
   final _formLogin = GlobalKey<FormState>();
-
-  Api api = new Api();
 
   @override
   Widget build(BuildContext context) {
@@ -75,15 +74,16 @@ class _LoginScreenState extends State<LoginScreen> {
                       textColor: Colors.white,
                       onPressed: () async {
                         if (_formLogin.currentState.validate()) {
-                          Login user = await api.login(_emailController.text, _senhaController.text);
+                          Login user = await api.login(
+                              _emailController.text, _senhaController.text);
                           if (user != null) {
-                            helper.saveLogado(user.id,user.token);
-                            print(user.token);
+                            helper.saveLogado(user.id, user.token);
                             Navigator.pop(context);
                             await Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => HomePage(user.token)));
+                                    builder: (context) =>
+                                        HomePage(user.token, user.id)));
                           } else {
                             dialog.showAlertDialog(
                                 context, 'Aviso', 'Login inválido');

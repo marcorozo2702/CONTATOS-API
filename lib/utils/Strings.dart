@@ -11,8 +11,6 @@ final String emailLoginColumn = "email";
 final String senhaLoginColumn = "senha";
 final String tokenLoginColumn = "token";
 
-
-
 final String logadoTable = "logadoTable";
 final String idLogadoColumn = "id";
 final String login_idLogadoColumn = "login_id";

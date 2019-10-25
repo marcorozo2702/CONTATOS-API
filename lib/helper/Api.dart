@@ -15,7 +15,6 @@ class Api {
         body: jsonEncode({"senha": senha, "email": email}),
         headers: {'token': token, 'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
-      print(response.body);
       Login dadosJson = new Login.fromMap(json.decode(response.body));
       return dadosJson;
     } else {
@@ -28,7 +27,6 @@ class Api {
         body: jsonEncode({"senha": senha, "email": email, "nome": nome}),
         headers: {'token': token, 'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
-      print(response.body);
       Login dadosJson = new Login.fromMap(json.decode(response.body));
       return dadosJson;
     } else {
@@ -36,21 +34,14 @@ class Api {
     }
   }
 
-//  Future<Person> cadastroPerson(String nome, String telefone) async {
-//    http.Response response = await http.post(BASE_URL + "Contato",
-//        body: jsonEncode({"telefone": telefone, "nome": nome}),
-//        headers: {'token': token, 'Content-Type': 'application/json'});
-//    if (response.statusCode == 200) {
-//      Person dadosJson = new Person.fromJson(json.decode(response.body));
-//      return dadosJson;
-//    } else {
-//      return null;
-//    }
-//  }
-
-  Future<Person> cadastroPerson(Person person, String token) async {
+  Future<Person> cadastroPerson(
+      Person person, int login_id, String token) async {
     http.Response response = await http.post(BASE_URL + "Contato",
-        body: jsonEncode({"telefone": person.telefone, "nome": person.nome}),
+        body: jsonEncode({
+          "telefone": person.telefone,
+          "nome": person.nome,
+          "usuario_id": login_id
+        }),
         headers: {'token': token, 'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
       Person dadosJson = new Person.fromJson(json.decode(response.body));
@@ -64,32 +55,30 @@ class Api {
     http.Response response = await http.get(BASE_URL + 'Contato',
         headers: {'token': token, 'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
-      print(response.body.toString());
       List<Person> pessoas = json.decode(response.body).map<Person>((map) {
         return Person.fromJson(map);
       }).toList();
-
-      print(pessoas);
       return pessoas;
     } else {
       return null;
     }
   }
 
-//  Future<Person> atualizarContato(String codigoContato, String token) async {
-//    http.Response response = await http.patch(
-//        BASE_URL + "contatos/" + codigoContato,
-//        headers: {'token': token, 'Content-Type': 'application/json'});
-//    if (response.statusCode == 200) {
-//      return new Person.fromMap(json.decode(response.body));
-//    } else {
-//      return null;
-//    }
-//  }
+  Future<Person> atualizarContato(
+      String codigoContato, int login_id, String token) async {
+    http.Response response = await http.patch(
+        BASE_URL + "Contato/" + codigoContato,
+        headers: {'token': token, 'Content-Type': 'application/json'});
+    if (response.statusCode == 200) {
+      return new Person.fromJson(json.decode(response.body));
+    } else {
+      return null;
+    }
+  }
 
-  Future<bool> deletarContato(String codigoContato) async {
+  Future<bool> deletarContato(String codigoContato, String token) async {
     http.Response response = await http.delete(
-        BASE_URL + "contatos/" + codigoContato,
+        BASE_URL + "Contato/" + codigoContato,
         headers: {'token': token, 'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
       return true;

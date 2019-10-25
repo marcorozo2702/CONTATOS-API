@@ -1,5 +1,3 @@
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'Contato.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -11,8 +9,9 @@ import '../helper/Api.dart';
 
 class HomePage extends StatefulWidget {
   String token;
+  int login_id;
 
-  HomePage(this.token);
+  HomePage(this.token, this.login_id);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -27,60 +26,64 @@ class _HomePageState extends State<HomePage> {
   List<Person> person = List();
   Api api = new Api();
 
+  var isLoading = false;
+
   @override
   void initState() {
     super.initState();
-    print(widget.token);
+    isLoading = true;
     _getAllPersons();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Contatos'),
-        backgroundColor: Colors.blueAccent,
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        actions: <Widget>[
-          PopupMenuButton<OrderOptions>(
-              itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
-                    const PopupMenuItem<OrderOptions>(
-                      child: Text('Ordenar de A-Z'),
-                      value: OrderOptions.orderaz,
-                    ),
-                    const PopupMenuItem<OrderOptions>(
-                      child: Text('Ordenar de Z-A'),
-                      value: OrderOptions.orderza,
-                    ),
-                    const PopupMenuItem<OrderOptions>(
-                      child: Text('Sair'),
-                      value: OrderOptions.sair,
-                    )
-                  ],
-              onSelected: _orderList)
-        ],
-      ),
-      backgroundColor: Colors.white,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showContactPage();
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.blueAccent,
-      ),
-      body:
-        WillPopScope(
-            child: ListView.builder(
-                padding: EdgeInsets.all(10.0),
-                itemCount: person.length,
-                itemBuilder: (context, index) {
-                  return _personCard(context, index);
-                }),
+        appBar: AppBar(
+          title: Text('Contatos'),
+          backgroundColor: Colors.blueAccent,
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          actions: <Widget>[
+            PopupMenuButton<OrderOptions>(
+                itemBuilder: (context) => <PopupMenuEntry<OrderOptions>>[
+                      const PopupMenuItem<OrderOptions>(
+                        child: Text('Ordenar de A-Z'),
+                        value: OrderOptions.orderaz,
+                      ),
+                      const PopupMenuItem<OrderOptions>(
+                        child: Text('Ordenar de Z-A'),
+                        value: OrderOptions.orderza,
+                      ),
+                      const PopupMenuItem<OrderOptions>(
+                        child: Text('Sair'),
+                        value: OrderOptions.sair,
+                      )
+                    ],
+                onSelected: _orderList)
+          ],
+        ),
+        backgroundColor: Colors.white,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            _showContactPage();
+          },
+          child: Icon(Icons.add),
+          backgroundColor: Colors.blueAccent,
+        ),
+        body: WillPopScope(
+            child: (isLoading)
+                ? Center(
+                    child: CircularProgressIndicator(),
+                  )
+                : ListView.builder(
+                    padding: EdgeInsets.all(10.0),
+                    itemCount: person.length,
+                    itemBuilder: (context, index) {
+                      return _personCard(context, index);
+                    }),
             onWillPop: () {
               return null;
-            })
-    );
+            }));
   }
 
   void _showContactPage({Person person}) async {
@@ -92,9 +95,9 @@ class _HomePageState extends State<HomePage> {
                 )));
     if (recContact != null) {
       if (person != null) {
-//        await api.atualizarContato(recContact, widget.token);
+        await api.atualizarContato(recContact, widget.login_id, widget.token);
       } else {
-        await api.cadastroPerson(recContact, widget.token);
+        await api.cadastroPerson(recContact, widget.login_id, widget.token);
       }
       _getAllPersons();
     }
@@ -200,7 +203,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       onPressed: () {
-//        helper.deletePerson(person[index].id);
+        api.deletarContato(person[index].id, widget.token);
         setState(() {
           person.removeAt(index);
           Navigator.pop(context);
@@ -212,8 +215,8 @@ class _HomePageState extends State<HomePage> {
 
   _getAllPersons() async {
     api.contatos(widget.token).then((list) {
-      print(list);
       setState(() {
+        isLoading = false;
         person = list;
       });
     });

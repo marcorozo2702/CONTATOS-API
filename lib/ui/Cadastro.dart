@@ -12,14 +12,13 @@ class Cadastro extends StatefulWidget {
 class _CadastroState extends State<Cadastro> {
   LoginHelper helper = LoginHelper();
   Dialogs dialog = new Dialogs();
+  Api api = new Api();
+
   final _nomeController = TextEditingController();
   final _emailController = TextEditingController();
   final _senhaController = TextEditingController();
   final _nomeFocus = FocusNode();
-
   final _formCadastro = GlobalKey<FormState>();
-
-  Api api = new Api();
 
   @override
   Widget build(BuildContext context) {
@@ -93,7 +92,7 @@ class _CadastroState extends State<Cadastro> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            HomePage(user.token)));
+                                            HomePage(user.token, user.id)));
                               }
                             } else {
                               dialog.showAlertDialog(
