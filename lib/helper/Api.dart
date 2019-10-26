@@ -65,11 +65,16 @@ class Api {
   }
 
   Future<Person> atualizarContato(
-      String codigoContato, int login_id, String token) async {
-    http.Response response = await http.patch(
-        BASE_URL + "Contato/" + codigoContato,
+      Person person, int login_id, String token) async {
+    http.Response response = await http.put(BASE_URL + "Contato/" + person.id,
+        body: jsonEncode({
+          "telefone": person.telefone,
+          "nome": person.nome,
+          "usuario_id": login_id
+        }),
         headers: {'token': token, 'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
+      print(response.body);
       return new Person.fromJson(json.decode(response.body));
     } else {
       return null;
