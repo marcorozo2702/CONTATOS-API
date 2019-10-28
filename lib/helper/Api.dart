@@ -15,7 +15,9 @@ class Api {
         body: jsonEncode({"senha": senha, "email": email}),
         headers: {'token': token, 'Content-Type': 'application/json'});
     if (response.statusCode == 200) {
+      print(response.body);
       Login dadosJson = new Login.fromMap(json.decode(response.body));
+
       return dadosJson;
     } else {
       return null;
